@@ -1,0 +1,117 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 230 25% 5%;
+    --foreground: 0 0% 100%;
+    --card: 230 20% 8%;
+    --card-foreground: 0 0% 100%;
+    --popover: 230 20% 8%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 199 89% 48%;
+    --primary-foreground: 230 25% 5%;
+    --secondary: 230 15% 15%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 230 15% 20%;
+    --muted-foreground: 220 10% 60%;
+    --accent: 250 70% 55%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 230 15% 18%;
+    --input: 230 15% 18%;
+    --ring: 199 89% 48%;
+    --radius: 0.75rem;
+
+    --gradient-primary: linear-gradient(135deg, hsl(199, 89%, 48%), hsl(250, 70%, 55%));
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+@layer utilities {
+  /* UI Effects */
+  .glass {
+    @apply bg-card/80 backdrop-blur-xl border border-border/50;
+  }
+
+  .glass-strong {
+    @apply bg-card/90 backdrop-blur-2xl border border-border/60;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent;
+  }
+
+  /* Glows */
+  .glow-primary {
+    box-shadow: 0 0 40px hsl(199, 89%, 48%, 0.3);
+  }
+
+  .glow-primary-sm {
+    box-shadow: 0 0 20px hsl(199, 89%, 48%, 0.2);
+  }
+
+  /* Background Patterns */
+  .grid-pattern {
+    background-image: 
+      linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .neural-dots {
+    background-image: radial-gradient(hsl(199, 89%, 48%, 0.15) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  /* Layout */
+  .container-custom {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Animations */
+  .animate-pulse-glow {
+    animation: pulse-glow 4s ease-in-out infinite;
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { opacity: 0.2; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(1.1); }
+  }
+
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  .animate-shimmer {
+    animation: shimmer 2.4s infinite linear;
+  }
+
+  /* Scroll Animations */
+  .stagger-children > * {
+    @apply opacity-0 translate-y-4 transition-all duration-500 ease-out;
+  }
+
+  .stagger-children.visible > *:nth-child(1) { transition-delay: 0ms; @apply opacity-100 translate-y-0; }
+  .stagger-children.visible > *:nth-child(2) { transition-delay: 100ms; @apply opacity-100 translate-y-0; }
+  .stagger-children.visible > *:nth-child(3) { transition-delay: 200ms; @apply opacity-100 translate-y-0; }
+  .stagger-children.visible > *:nth-child(4) { transition-delay: 300ms; @apply opacity-100 translate-y-0; }
+  .stagger-children.visible > *:nth-child(5) { transition-delay: 400ms; @apply opacity-100 translate-y-0; }
+}
