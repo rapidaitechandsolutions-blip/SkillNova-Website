@@ -1,12 +1,14 @@
 import { Sparkles, Mail, ExternalLink, Linkedin, Twitter, Instagram, ArrowUpRight } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const quickLinks = [
-  { label: 'About', href: '#about' },
-  { label: 'Programs', href: '#programs' },
-  { label: 'Impact', href: '#impact' },
-  { label: 'For Colleges', href: '#colleges' },
-  { label: 'Apply', href: '#apply' },
+  { label: 'Home', href: '/' },
+  { label: 'About', href: '/about' },
+  { label: 'Programs', href: '/programs' },
+  { label: 'Impact', href: '/impact' },
+  { label: 'For Colleges', href: '/colleges' },
+  { label: 'Apply Now', href: '/#apply' },
 ];
 
 const socialLinks = [
@@ -16,14 +18,26 @@ const socialLinks = [
 ];
 
 export function Footer() {
-  const scrollToSection = (href: string) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+  const navigate = useNavigate();
+  const location = useLocation();
+  const currentYear = new Date().getFullYear();
+
+  const handleNavigation = (href: string) => {
+    if (href.includes('#')) {
+      const [path, hash] = href.split('#');
+      if (location.pathname === path || (path === '/' && location.pathname === '')) {
+        const element = document.getElementById(hash);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      } else {
+        navigate(href);
+      }
+    } else {
+      navigate(href);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
-
-  const currentYear = new Date().getFullYear();
 
   return (
     <footer id="contact" className="relative border-t border-white/5 bg-[#030712] overflow-hidden">
@@ -33,16 +47,27 @@ export function Footer() {
       <div className="container-custom relative z-10 pt-20 pb-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8">
           
-          {/* Brand & Mission */}
+          {/* Brand & Mission with Logo */}
           <div className="lg:col-span-5 flex flex-col items-start">
-            <a href="#" className="flex items-center gap-2 mb-6 group">
-              <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center glow-primary-sm group-hover:rotate-6 transition-transform">
-                <Sparkles className="w-5 h-5 text-white" />
+            <button 
+              onClick={() => {
+                navigate('/');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }} 
+              className="flex items-center gap-3 mb-6 group cursor-pointer"
+            >
+              <div className="relative">
+                <img 
+                  src="/SkillNova_BACKGROUNDLSS.png" 
+                  alt="SkillNova Logo" 
+                  className="w-12 h-12 object-contain group-hover:scale-110 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
               </div>
-              <span className="text-xl font-bold text-white tracking-tight">
+              <span className="text-2xl font-bold text-white tracking-tight">
                 Skill<span className="text-primary italic">Nova</span>
               </span>
-            </a>
+            </button>
             
             <p className="text-slate-400 text-sm leading-relaxed max-w-sm mb-8">
               India's premier AI-Native Engineering Accelerator. We bridge the gap between academic theory and high-speed industry deployment.
@@ -66,15 +91,15 @@ export function Footer() {
 
           <div className="hidden lg:block lg:col-span-1" />
 
-          {/* Quick Links */}
+          {/* Quick Links with Router Navigation */}
           <div className="lg:col-span-3">
             <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-white mb-6">Navigation</h4>
             <ul className="grid grid-cols-1 gap-4">
               {quickLinks.map((link) => (
                 <li key={link.label}>
                   <button
-                    onClick={() => scrollToSection(link.href)}
-                    className="text-sm text-slate-400 hover:text-primary transition-colors flex items-center group"
+                    onClick={() => handleNavigation(link.href)}
+                    className="text-sm text-slate-400 hover:text-white transition-colors flex items-center group"
                   >
                     <span className="w-0 group-hover:w-4 h-px bg-primary transition-all mr-0 group-hover:mr-2" />
                     {link.label}
@@ -102,7 +127,7 @@ export function Footer() {
               </a>
 
               <a
-                href="https://rapidaiservices.com"
+                href="https://rapidai-services-and-solutions.netlify.app/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group flex flex-col p-4 rounded-2xl bg-white/5 border border-white/5 hover:border-primary/20 transition-all"
@@ -129,7 +154,9 @@ export function Footer() {
               <span>A Venture by</span>
               <div className="w-px h-2 bg-slate-800" />
               <a 
-                href="https://rapidaiservices.com" 
+                href="https://rapidai-services-and-solutions.netlify.app/" 
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-primary hover:underline font-medium"
               >
                 RapidAI Services and Solutions
@@ -138,8 +165,8 @@ export function Footer() {
           </div>
 
           <div className="flex items-center gap-6">
-            <a href="#" className="text-[11px] font-bold text-slate-500 hover:text-white uppercase tracking-widest transition-colors">Privacy</a>
-            <a href="#" className="text-[11px] font-bold text-slate-500 hover:text-white uppercase tracking-widest transition-colors">Terms</a>
+            <a href="#" className="text-[11px] font-bold text-slate-500 hover:text-white uppercase tracking-widest transition-colors">Privacy Policy</a>
+            <a href="#" className="text-[11px] font-bold text-slate-500 hover:text-white uppercase tracking-widest transition-colors">Terms of Service</a>
           </div>
         </div>
       </div>

@@ -1,43 +1,54 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Users, ThumbsUp, Award, Building2, ChevronLeft, ChevronRight, Quote, Star } from 'lucide-react';
+import { Users, ThumbsUp, Award, Building2, ChevronLeft, ChevronRight, Quote, Star, CheckCircle2 } from 'lucide-react';
 import { useScrollAnimation, useCountAnimation } from '@/hooks/useScrollAnimation';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
+// Original Stats
 const stats = [
-  { icon: Users, value: 16, suffix: '+', label: 'Students Trained', color: 'text-blue-400' },
-  { icon: ThumbsUp, value: 100, suffix: '%', label: 'Satisfaction', color: 'text-emerald-400' },
-  { icon: Award, value: 10, suffix: '+', label: 'AI Products', color: 'text-purple-400' },
-  { icon: Building2, value: 5, suffix: '+', label: 'Colleges', color: 'text-amber-400' },
+  { icon: Users, value: 16, suffix: '+', label: 'Engineers Trained', color: 'text-blue-400' },
+  { icon: ThumbsUp, value: 100, suffix: '%', label: 'Recommendation Rate', color: 'text-emerald-400' },
+  { icon: Award, value: 150, suffix: '+', label: 'Projects Deployed', color: 'text-purple-400' },
+  { icon: Building2, value: 5, suffix: '', label: 'Partner Colleges', color: 'text-amber-400' },
 ];
 
 const ratings = [
-  { label: 'Project Quality', value: 4.2 },
-  { label: 'Mentorship Support', value: 4.4 },
-  { label: 'Practical Learning', value: 4.3 },
-  { label: 'Career Impact', value: 4.2 },
+  { label: 'Project Quality', value: 4.8 },
+  { label: 'Timely Delivery', value: 4.7 },
+  { label: 'Support & Guidance', value: 4.9 },
+  { label: 'Management Responsiveness', value: 4.8 },
 ];
 
 const testimonials = [
   {
-    quote: "The hands-on AI approach made all the difference. I didn't just learn theory; I built a real product.",
-    author: "Engineering Student",
-    college: "Partner College",
-    initials: "ES"
+    quote: "The AI-Native workflow helped me move beyond just writing code. I actually understood how to deploy a full-stack AI app for my final year submission.",
+    author: "Desam Yashoda",
+    college: "Ravindra College of Engineering for Women",
+    project: "Anime Face Generation using DL",
+    initials: "DY"
   },
   {
     quote: "Management responsiveness is excellent. They truly care about student outcomes and industry readiness.",
-    author: "Final Year Student",
-    college: "Tech University",
-    initials: "FS"
+    author: "Aduru Prasanna Teja",
+    college: "Pondicherry University",
+    project: "Client Acquisition Analysis",
+    initials: "AP"
   },
   {
-    quote: "Best guidance for AI model support. The viva preparation support was a lifesaver for my finals.",
-    author: "AI Builder Cohort",
-    college: "Engineering Institute",
-    initials: "AC"
+    quote: "From zero deployment knowledge to launching my project on a live server. Highly recommend the 5-day sprint to all my friends.",
+    author: "Shaik Muskan Begum",
+    college: "Ravindra College of Engineering for Women",
+    project: "Anime Face Generation",
+    initials: "SM"
+  },
+  {
+    quote: "Everything was good. The technical guidance for deep learning models was professional and easy to follow.",
+    author: "Sura Sravani",
+    college: "Ravindra College of Engineering for Women",
+    project: "Deep Learning Specialist",
+    initials: "SS"
   },
 ];
 
@@ -66,7 +77,7 @@ function RatingBar({ label, value, isVisible }: { label: string; value: number; 
           initial={{ width: 0 }}
           animate={{ width: isVisible ? `${width}%` : 0 }}
           transition={{ duration: 1.5, ease: "circOut" }}
-          className="h-full bg-gradient-to-r from-primary to-accent relative"
+          className="h-full bg-gradient-to-r from-primary to-blue-500 relative"
         >
           <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,0.2)_50%,transparent_100%)] animate-shimmer" />
         </motion.div>
@@ -79,6 +90,18 @@ export function Impact() {
   const { ref, isVisible } = useScrollAnimation<HTMLElement>();
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(0);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({
+        x: (e.clientX / window.innerWidth - 0.5) * 20,
+        y: (e.clientY / window.innerHeight - 0.5) * 20,
+      });
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
 
   const slideVariants = {
     enter: (direction: number) => ({ x: direction > 0 ? 50 : -50, opacity: 0 }),
@@ -93,10 +116,19 @@ export function Impact() {
 
   return (
     <section id="impact" ref={ref} className="relative py-24 md:py-32 overflow-hidden bg-background">
-      {/* Premium Background Mesh */}
+      {/* Background - Synced with Hero */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.05)_0%,transparent_50%)]" />
-        <div className="absolute -top-[20%] right-[10%] w-[400px] h-[400px] bg-primary/10 rounded-full blur-[120px] animate-pulse" />
+        <motion.div
+          animate={{ x: mousePosition.x * -0.5, y: mousePosition.y * -0.5 }}
+          transition={{ type: 'spring', stiffness: 50, damping: 20 }}
+          className="absolute inset-0 grid-pattern opacity-[0.1] scale-110"
+        />
+        {/* Subtle glow highlights to match Hero's primary/accent colors */}
+        <div className="absolute top-[20%] right-[-10%] w-[50vw] h-[50vw] bg-primary/5 rounded-full blur-[120px]" />
+        <div className="absolute bottom-[10%] left-[-5%] w-[40vw] h-[40vw] bg-accent/5 rounded-full blur-[120px]" />
+        
+        {/* Center Vignette */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,hsl(var(--background))_90%)]" />
       </div>
 
       <div className="container-custom relative z-10">
@@ -107,14 +139,14 @@ export function Impact() {
           viewport={{ once: true }}
           className="text-center max-w-2xl mx-auto mb-20"
         >
-          <Badge variant="outline" className="mb-4 px-4 py-1 border-primary/30 text-primary bg-primary/5 uppercase tracking-widest text-[10px]">
-            Our Track Record
+          <Badge variant="outline" className="mb-4 px-4 py-1 border-white/10 text-muted-foreground bg-white/5 uppercase tracking-widest text-[10px] font-bold">
+            Real Results & Feedback
           </Badge>
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
-            Proven <span className="gradient-text">Student Success</span>
+          <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6 text-white">
+            Engineering the <span className="gradient-text italic font-semibold">AI-Ready</span> Generation
           </h2>
-          <p className="text-slate-400 text-lg">
-            We don't just teach code; we launch careers with industry-validated results.
+          <p className="text-muted-foreground text-lg">
+            Our results are verified by students from leading technical institutions. We turn learners into digital creators.
           </p>
         </motion.div>
 
@@ -123,19 +155,18 @@ export function Impact() {
           {stats.map((stat, idx) => (
             <motion.div
               key={stat.label}
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.1 }}
-              whileHover={{ y: -5 }}
-              className="p-6 rounded-3xl glass border-white/5 flex flex-col items-center justify-center text-center group"
+              className="p-8 rounded-3xl glass border-white/5 flex flex-col items-center justify-center text-center group transition-all hover:bg-white/[0.04]"
             >
-              <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <stat.icon className={cn("w-6 h-6", stat.color)} />
+              <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center mb-4 group-hover:bg-primary/10 transition-colors">
+                <stat.icon className={cn("w-6 h-6 transition-transform group-hover:scale-110", stat.color)} />
               </div>
               <div className="text-3xl md:text-4xl font-black text-white mb-1">
                 <AnimatedCounter value={stat.value} suffix={stat.suffix} isVisible={isVisible} />
               </div>
-              <div className="text-[10px] uppercase tracking-[0.2em] font-bold text-slate-500">{stat.label}</div>
+              <div className="text-[10px] uppercase tracking-[0.2em] font-bold text-muted-foreground/60">{stat.label}</div>
             </motion.div>
           ))}
         </div>
@@ -146,18 +177,30 @@ export function Impact() {
           <motion.div 
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
-            className="lg:col-span-2 p-8 rounded-[2.5rem] glass-strong border-white/10"
+            className="lg:col-span-2 p-8 rounded-[2.5rem] bg-white/[0.01] border border-white/5 backdrop-blur-sm"
           >
             <div className="flex items-center gap-3 mb-8">
               <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center">
                 <Star className="w-5 h-5 text-primary" />
               </div>
-              <h3 className="text-xl font-bold text-white">Quality Metrics</h3>
+              <div>
+                <h3 className="text-xl font-bold text-white leading-tight">Industry Standards</h3>
+                <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Feedback Analytics</p>
+              </div>
             </div>
             <div className="space-y-8">
               {ratings.map((rating) => (
                 <RatingBar key={rating.label} {...rating} isVisible={isVisible} />
               ))}
+            </div>
+            
+            <div className="mt-10 p-4 rounded-2xl bg-primary/5 border border-primary/10 flex items-center gap-4">
+               <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center shrink-0">
+                  <CheckCircle2 className="w-5 h-5 text-primary" />
+               </div>
+               <p className="text-xs text-muted-foreground font-medium">
+                 <span className="text-white font-bold">100% Student Recommendation</span> based on recent project cohort analysis.
+               </p>
             </div>
           </motion.div>
 
@@ -165,9 +208,9 @@ export function Impact() {
           <motion.div 
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
-            className="lg:col-span-3 p-8 md:p-12 rounded-[2.5rem] glass border-white/5 bg-white/[0.02] relative min-h-[400px] flex flex-col justify-between"
+            className="lg:col-span-3 p-8 md:p-12 rounded-[2.5rem] glass border-white/5 bg-gradient-to-br from-white/[0.04] to-transparent relative min-h-[450px] flex flex-col justify-between"
           >
-            <Quote className="absolute top-10 right-10 w-20 h-20 text-white/[0.03]" />
+            <Quote className="absolute top-10 right-10 w-24 h-24 text-primary/[0.03]" />
             
             <div className="relative overflow-hidden">
               <AnimatePresence mode="wait" custom={direction}>
@@ -181,17 +224,20 @@ export function Impact() {
                   transition={{ duration: 0.5, ease: "anticipate" }}
                   className="space-y-8"
                 >
-                  <p className="text-2xl md:text-3xl font-medium leading-relaxed text-slate-200 tracking-tight">
+                  <p className="text-2xl md:text-3xl font-medium leading-relaxed text-slate-100 tracking-tight italic">
                     "{testimonials[current].quote}"
                   </p>
                   
-                  <div className="flex items-center gap-4">
-                    <div className="w-14 h-14 rounded-full bg-gradient-to-tr from-primary to-accent flex items-center justify-center text-white font-bold text-xl shadow-xl shadow-primary/20">
+                  <div className="flex items-center gap-5">
+                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-primary to-blue-600 flex items-center justify-center text-white font-bold text-2xl shadow-2xl shadow-primary/20">
                       {testimonials[current].initials}
                     </div>
                     <div>
-                      <h4 className="text-white font-bold text-lg">{testimonials[current].author}</h4>
-                      <p className="text-slate-500 text-sm font-medium">{testimonials[current].college}</p>
+                      <h4 className="text-white font-bold text-xl">{testimonials[current].author}</h4>
+                      <div className="flex flex-col text-sm font-medium">
+                        <span className="text-primary">{testimonials[current].project}</span>
+                        <span className="text-muted-foreground">{testimonials[current].college}</span>
+                      </div>
                     </div>
                   </div>
                 </motion.div>
@@ -199,7 +245,7 @@ export function Impact() {
             </div>
 
             {/* Slider Controls */}
-            <div className="flex items-center justify-between mt-12">
+            <div className="flex items-center justify-between mt-12 border-t border-white/5 pt-8">
               <div className="flex gap-2">
                 {testimonials.map((_, i) => (
                   <button
@@ -209,8 +255,8 @@ export function Impact() {
                       setCurrent(i);
                     }}
                     className={cn(
-                      "h-1.5 rounded-full transition-all duration-300",
-                      i === current ? "w-8 bg-primary" : "w-2 bg-white/10 hover:bg-white/20"
+                      "h-1.5 rounded-full transition-all duration-500",
+                      i === current ? "w-10 bg-primary" : "w-2 bg-white/10 hover:bg-white/20"
                     )}
                   />
                 ))}
@@ -220,7 +266,7 @@ export function Impact() {
                   size="icon" 
                   variant="outline" 
                   onClick={() => paginate(-1)} 
-                  className="rounded-full border-white/10 bg-white/5 hover:bg-white/10 text-white h-12 w-12"
+                  className="rounded-full border-white/10 bg-white/5 hover:bg-white/10 text-white h-12 w-12 hover:border-primary/50 transition-all"
                 >
                   <ChevronLeft className="w-6 h-6" />
                 </Button>
@@ -228,7 +274,7 @@ export function Impact() {
                   size="icon" 
                   variant="outline" 
                   onClick={() => paginate(1)} 
-                  className="rounded-full border-white/10 bg-white/5 hover:bg-white/10 text-white h-12 w-12"
+                  className="rounded-full border-white/10 bg-white/5 hover:bg-white/10 text-white h-12 w-12 hover:border-primary/50 transition-all"
                 >
                   <ChevronRight className="w-6 h-6" />
                 </Button>

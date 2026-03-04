@@ -32,16 +32,33 @@
 
   * {
     @apply border-border;
+    /* Fix for "gaps" caused by padding adding to width */
+    box-sizing: border-box; 
   }
 
   html {
     scroll-behavior: smooth;
+    /* Prevents horizontal "wobble" on mobile */
+    overflow-x: hidden;
+    width: 100%;
   }
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
     font-family: 'Inter', sans-serif;
+    /* Ensures the body never exceeds the screen width */
+    overflow-x: hidden;
+    width: 100%;
+    position: relative;
+    /* Better font scaling for mobile */
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
   }
+
+  /* Responsive Typography Adjustments */
+  h1 { @apply text-3xl md:text-5xl lg:text-6xl font-extrabold leading-tight; }
+  h2 { @apply text-2xl md:text-4xl font-bold; }
+  p { @apply text-sm md:text-base leading-relaxed; }
 }
 
 @layer utilities {
@@ -58,31 +75,37 @@
     @apply bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent;
   }
 
-  /* Glows */
+  /* Glows - Adjusted for mobile performance */
   .glow-primary {
-    box-shadow: 0 0 40px hsl(199, 89%, 48%, 0.3);
+    box-shadow: 0 0 30px hsl(199, 89%, 48%, 0.2);
   }
 
   .glow-primary-sm {
-    box-shadow: 0 0 20px hsl(199, 89%, 48%, 0.2);
+    box-shadow: 0 0 15px hsl(199, 89%, 48%, 0.15);
   }
 
-  /* Background Patterns */
+  /* Background Patterns - Size-adjusted for mobile */
   .grid-pattern {
     background-image: 
-      linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
-    background-size: 40px 40px;
+      linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 30px 30px; /* Smaller pattern for mobile */
+  }
+
+  @screen md {
+    .grid-pattern {
+      background-size: 40px 40px;
+    }
   }
 
   .neural-dots {
-    background-image: radial-gradient(hsl(199, 89%, 48%, 0.15) 1px, transparent 1px);
-    background-size: 40px 40px;
+    background-image: radial-gradient(hsl(199, 89%, 48%, 0.1) 1px, transparent 1px);
+    background-size: 30px 30px;
   }
 
-  /* Layout */
+  /* Layout - Standardizing horizontal gaps */
   .container-custom {
-    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+    @apply w-full max-w-7xl mx-auto px-5 sm:px-6 lg:px-8;
   }
 
   /* Animations */
@@ -92,7 +115,7 @@
 
   @keyframes pulse-glow {
     0%, 100% { opacity: 0.2; transform: scale(1); }
-    50% { opacity: 0.4; transform: scale(1.1); }
+    50% { opacity: 0.4; transform: scale(1.05); }
   }
 
   @keyframes shimmer {
@@ -101,17 +124,22 @@
   }
 
   .animate-shimmer {
+    @apply relative overflow-hidden;
+  }
+
+  .animate-shimmer::after {
+    content: "";
+    @apply absolute inset-0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
     animation: shimmer 2.4s infinite linear;
   }
 
-  /* Scroll Animations */
+  /* Scroll Animations - Removed translate-x for mobile to prevent overflow gaps */
   .stagger-children > * {
-    @apply opacity-0 translate-y-4 transition-all duration-500 ease-out;
+    @apply opacity-0 translate-y-6 transition-all duration-700 ease-out;
   }
 
-  .stagger-children.visible > *:nth-child(1) { transition-delay: 0ms; @apply opacity-100 translate-y-0; }
-  .stagger-children.visible > *:nth-child(2) { transition-delay: 100ms; @apply opacity-100 translate-y-0; }
-  .stagger-children.visible > *:nth-child(3) { transition-delay: 200ms; @apply opacity-100 translate-y-0; }
-  .stagger-children.visible > *:nth-child(4) { transition-delay: 300ms; @apply opacity-100 translate-y-0; }
-  .stagger-children.visible > *:nth-child(5) { transition-delay: 400ms; @apply opacity-100 translate-y-0; }
+  .stagger-children.visible > * {
+    @apply opacity-100 translate-y-0;
+  }
 }
